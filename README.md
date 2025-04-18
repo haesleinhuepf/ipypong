@@ -8,8 +8,13 @@ Play pong in Jupyter Notebooks.
 
 ![](https://github.com/haesleinhuepf/ipypong/blob/main/docs/images/ipypong_demo.gif?raw=true)
 
-## Usage
+## Installation
 
+```
+pip install ipypong
+```
+
+## Usage
 
 The `pong()` function creates an interactive Pong game in your Jupyter notebook.
 
