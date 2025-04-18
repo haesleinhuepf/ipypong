@@ -17,8 +17,8 @@ ball_radius = 10
 paddle_left_y = 200
 paddle_right_y = 200
 paddle_width = 10
-paddle_left_height = 133  # Changed from 60 to 133 (approximately 1/3 of 400)
-paddle_right_height = 133  # Changed from 60 to 133 (approximately 1/3 of 400)
+paddle_left_height = 133 
+paddle_right_height = 133  
 paddle_speed = 10
 
 score_left = 0
@@ -27,11 +27,58 @@ canvas = None
 num_players = 1  # Default to single player mode
 current_difficulty = 0.5  # Default difficulty level
 
-def pong(players=1, difficulty_level=0.5):
-    global canvas, num_players, current_difficulty
+def pong(players=1, difficulty_level=0.5, ball_speed=5, canvas_width=600, canvas_height=400):
+    """Initialize and run a Pong game with configurable settings.
+
+    This function creates an interactive Pong game using IPython widgets and canvas.
+    The game supports different player modes, difficulty levels, and ball speeds.
+
+    Parameters
+    ----------
+    players : int, optional
+        Number of players in the game (default is 1)
+        - 0: Two AI players
+        - 1: One human player (left paddle) and one AI player (right paddle)
+        - 2: Two human players
+    difficulty_level : float, optional
+        Difficulty level for AI players, between 0.0 and 1.0 (default is 0.5)
+        - 0.0: Easiest (slow and unpredictable AI)
+        - 1.0: Hardest (fast and predictable AI)
+    ball_speed : float, optional
+        Initial speed of the ball (default is 5)
+    canvas_width : int, optional
+        Width of the game canvas in pixels (default is 600)
+    canvas_height : int, optional
+        Height of the game canvas in pixels (default is 400)
+
+    Returns
+    -------
+    None
+
+    Notes
+    -----
+    - The game is displayed in a Jupyter notebook using IPython widgets
+    - Controls for human players:
+        - Left paddle: 'w' (up) and 's' (down)
+        - Right paddle: 'i' (up) and 'k' (down)
+    - The game features dynamic difficulty adjustment and paddle size changes
+    - Scores are displayed at the top of the game
+    """
+    global canvas, num_players, current_difficulty, ball_speed_x, ball_speed_y
+    global paddle_left_height, paddle_right_height, score_left, score_right
+    
+    # Reset game state
     num_players = players
     current_difficulty = max(0, min(1, difficulty_level))  # Ensure difficulty is between 0 and 1
-    canvas = Canvas(width=600, height=400)
+    ball_speed_x = ball_speed
+    ball_speed_y = ball_speed
+    # Set paddle height to 1/3 of canvas height
+    paddle_left_height = canvas_height // 3
+    paddle_right_height = canvas_height // 3
+    score_left = 0
+    score_right = 0
+    
+    canvas = Canvas(width=canvas_width, height=canvas_height)
     out = Output()
     display(canvas)
 
