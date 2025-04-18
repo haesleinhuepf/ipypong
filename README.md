@@ -8,11 +8,27 @@ Play pong in Jupyter Notebooks.
 
 ## Usage
 
+
+The `pong()` function creates an interactive Pong game in your Jupyter notebook.
+
 ```python
 from ipypong import pong
-pong()
+pong(players=0, difficulty_level=0.9)
 ```
 
+- **Player Modes**:
+  - `players=0`: Two AI players
+  - `players=1`: One human player (left paddle) and one AI player (right paddle)
+  - `players=2`: Two human players
+
+- **Controls**:
+  - Left paddle: 'w' (up) and 's' (down)
+  - Right paddle: 'i' (up) and 'k' (down)
+
+- **Customization**:
+  - `difficulty_level`: Set between 0.0 (easiest) and 1.0 (hardest)
+  - `ball_speed`: Adjust the initial speed of the ball (default: 5)
+  - `canvas_width` and `canvas_height`: Customize game dimensions
 
 
 ## Contributing
