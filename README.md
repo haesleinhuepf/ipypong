@@ -40,11 +40,7 @@ Contributions, bug-reports and ideas for further development are very welcome.
 ## License
 
 Distributed under the terms of the [BSD-3] license,
-"stackview" is free and open source software
-
-## Issues
-
-If you encounter any problems, please create a thread on [image.sc] along with a detailed description and tag [@haesleinhuepf].
+"ipypong" is free and open source software
 
 
 [BSD-3]: http://opensource.org/licenses/BSD-3-Clause
