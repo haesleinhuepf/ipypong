@@ -17,7 +17,8 @@ ball_radius = 10
 paddle_left_y = 200
 paddle_right_y = 200
 paddle_width = 10
-paddle_height = 60
+paddle_left_height = 133  # Changed from 60 to 133 (approximately 1/3 of 400)
+paddle_right_height = 133  # Changed from 60 to 133 (approximately 1/3 of 400)
 paddle_speed = 10
 
 score_left = 0
@@ -44,15 +45,15 @@ def pong(players=1):
             # Left paddle controls (Player 1)
             if key == 'w' and paddle_left_y > 0:
                 paddle_left_y -= paddle_speed
-            elif key == 's' and paddle_left_y < canvas.height - paddle_height:
+            elif key == 's' and paddle_left_y < canvas.height - paddle_left_height:
                 paddle_left_y += paddle_speed
             
-            # Right paddle controls (Player 2)
-            if num_players == 2:
-                if key == 'i' and paddle_right_y > 0:
-                    paddle_right_y -= paddle_speed
-                elif key == 'k' and paddle_right_y < canvas.height - paddle_height:
-                    paddle_right_y += paddle_speed
+        # Right paddle controls (Player 2)
+        if num_players == 2:
+            if key == 'i' and paddle_right_y > 0:
+                paddle_right_y -= paddle_speed
+            elif key == 'k' and paddle_right_y < canvas.height - paddle_right_height:
+                paddle_right_y += paddle_speed
 
     canvas.on_key_down(handle_keydown)
 
@@ -68,19 +69,19 @@ def pong(players=1):
 
 
 def game_loop(change):
-    global canvas, ball_x, ball_y, ball_speed_x, ball_speed_y, score_left, score_right, paddle_right_y, paddle_left_y
+    global canvas, ball_x, ball_y, ball_speed_x, ball_speed_y, score_left, score_right, paddle_right_y, paddle_left_y, paddle_left_height, paddle_right_height
 
     # AI player movement
     if num_players < 2:  # Right paddle AI (for 0 or 1 player mode)
-        if ball_y > paddle_right_y + paddle_height/2:
-            paddle_right_y = min(paddle_right_y + paddle_speed, canvas.height - paddle_height)
-        elif ball_y < paddle_right_y + paddle_height/2:
+        if ball_y > paddle_right_y + paddle_right_height/2:
+            paddle_right_y = min(paddle_right_y + paddle_speed, canvas.height - paddle_right_height)
+        elif ball_y < paddle_right_y + paddle_right_height/2:
             paddle_right_y = max(paddle_right_y - paddle_speed, 0)
             
     if num_players == 0:  # Left paddle AI (for 0 player mode)
-        if ball_y > paddle_left_y + paddle_height/2:
-            paddle_left_y = min(paddle_left_y + paddle_speed, canvas.height - paddle_height)
-        elif ball_y < paddle_left_y + paddle_height/2:
+        if ball_y > paddle_left_y + paddle_left_height/2:
+            paddle_left_y = min(paddle_left_y + paddle_speed, canvas.height - paddle_left_height)
+        elif ball_y < paddle_left_y + paddle_left_height/2:
             paddle_left_y = max(paddle_left_y - paddle_speed, 0)
 
     # Move ball
@@ -93,22 +94,26 @@ def game_loop(change):
 
     # Ball collisions with paddles
     if (ball_x - ball_radius <= paddle_width and
-        paddle_left_y <= ball_y <= paddle_left_y + paddle_height):
+        paddle_left_y <= ball_y <= paddle_left_y + paddle_left_height):
         ball_speed_x *= -1
         ball_x = paddle_width + ball_radius
 
     if (ball_x + ball_radius >= canvas.width - paddle_width and
-        paddle_right_y <= ball_y <= paddle_right_y + paddle_height):
+        paddle_right_y <= ball_y <= paddle_right_y + paddle_right_height):
         ball_speed_x *= -1
         ball_x = canvas.width - paddle_width - ball_radius
 
     # Score points
     if ball_x <= 0:
         score_right += 1
+        # Shorten the left paddle when left player loses
+        paddle_left_height = max(40, paddle_left_height - 20)  # Don't go below 40 pixels
         ball_x = canvas.width / 2
         ball_y = canvas.height / 2
     elif ball_x >= canvas.width:
         score_left += 1
+        # Shorten the right paddle when right player loses
+        paddle_right_height = max(40, paddle_right_height - 20)  # Don't go below 40 pixels
         ball_x = canvas.width / 2
         ball_y = canvas.height / 2
 
@@ -118,9 +123,9 @@ def game_loop(change):
         canvas.fill_style = 'white'
         canvas.fill_rect(0, 0, canvas.width, canvas.height)
         canvas.fill_style = 'black'
-        canvas.fill_rect(0, paddle_left_y, paddle_width, paddle_height)
+        canvas.fill_rect(0, paddle_left_y, paddle_width, paddle_left_height)
         canvas.fill_rect(canvas.width - paddle_width, paddle_right_y,
-                        paddle_width, paddle_height)
+                        paddle_width, paddle_right_height)
         canvas.fill_circle(ball_x, ball_y, ball_radius)
         canvas.font = '30px Arial'
         canvas.fill_text(str(score_left), canvas.width/4, 50)
